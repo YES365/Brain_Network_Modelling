@@ -26,9 +26,9 @@ Muldoon, Sarah Feldt et al. (2017). Data from: Stimulation-based control of dyna
 
 ### forward_models
 
-[forward_models](forward_models) 包含forward models的代码，用于将模拟得神经活动转化为测量数据。目前有用于生成fMRI数据的 [Balloon_Windkessel_model.m](forward_models\hemodynamics\Balloon_Windkessel_model.m) 
+[forward_models](forward_models) 包含forward models的代码，用于将模拟得神经活动转化为测量数据。目前有用于生成fMRI数据的 [Balloon_Windkessel_model.m](forward_models/hemodynamics/Balloon_Windkessel_model.m) 
 
-forward_models are used to convert simulated neural activity into measured data. Currently, there is  [Balloon_Windkessel_model.m](forward_models\hemodynamics\Balloon_Windkessel_model.m) for generating fMRI data.
+forward_models are used to convert simulated neural activity into measured data. Currently, there is  [Balloon_Windkessel_model.m](forward_models/hemodynamics/Balloon_Windkessel_model.m) for generating fMRI data.
 
 ### model_metrics
 
