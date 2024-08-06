@@ -21,6 +21,10 @@ tau = 0.98;     % s
 alpha = 0.32;
 rho = 0.34;
 
+k1 = 3.72;
+k2 = 0.53;
+k3 = 0.53;
+
 %% parameters from DTB
 % epsilon = 200;
 % kappa = 1/0.8;
@@ -29,6 +33,12 @@ rho = 0.34;
 % tau = 1;
 % rho = 0.8;
 
+% k1 = 7*rho;
+% k2 = 2;
+% k3 = 2*rho - 0.2;
+
+
+V0 = 0.02;
 alpha_div = 1./alpha;
 
 for i = 1:va_shape(2)-1
@@ -41,13 +51,6 @@ for i = 1:va_shape(2)-1
 end
 
 % 数据转换为BOLD信号
-V0 = 0.02;
-% k1 = 3.72;
-% k2 = 0.53;
-% k3 = 0.53;
-k1 = 7*rho;
-k2 = 2;
-k3 = 2*rho - 0.2;
 
 % BOLD = V0*(k1*(1-q) + k2*(1-q./v) + k3*(1-v)); 
 BOLD_end = gather(V0*(k1*(1-q(:,end)) + k2*(1-q(:,end)./v(:,end)) + k3*(1-v(:,end)))); 
