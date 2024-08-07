@@ -45,21 +45,24 @@ S_emax = WC_S_max(a_e, theta_e);
 S_imax = WC_S_max(a_i, theta_i);
 %% 进行模拟
 T = size(P, 2);
-tpre = ceil(1/dt);
+% tpre = ceil(1/dt);
 
-E = ones([n T+tpre])/10;
-I = ones([n T+tpre])/10;
+% E = ones([n T+tpre])/10;
+% I = ones([n T+tpre])/10;
 
-% 预运行1s
-for t = 1:tpre-1
-    E(:,t+1) = E(:,t) + dt*(1/tau).*(-E(:,t) + (S_emax-E(:,t)).* ...
-        S_e(c1*E(:,t)-c2*I(:,t)+c5*SC*E(:,t)+P(:,t+1))) + sigma*randn([n,1])*sqrt(dt);
-    I(:,t+1) = I(:,t) + dt*(1/tau)*(-I(:,t) + (S_imax-I(:,t)).* ...
-        S_i(c3*E(:,t)-c4*I(:,t))) + sigma*randn([n,1])*sqrt(dt);
-end
+E = ones([n T])/10;
+I = ones([n T])/10;
+
+% % 预运行1s
+% for t = 1:tpre-1
+%     E(:,t+1) = E(:,t) + dt*(1/tau).*(-E(:,t) + (S_emax-E(:,t)).* ...
+%         S_e(c1*E(:,t)-c2*I(:,t)+c5*SC*E(:,t)+P(:,t+1))) + sigma*randn([n,1])*sqrt(dt);
+%     I(:,t+1) = I(:,t) + dt*(1/tau)*(-I(:,t) + (S_imax-I(:,t)).* ...
+%         S_i(c3*E(:,t)-c4*I(:,t))) + sigma*randn([n,1])*sqrt(dt);
+% end
 
 
-for t = tpre:length(E)-1
+for t = 1:length(E)-1
     E(:,t+1) = E(:,t) + dt*(1/tau).*(-E(:,t) + (S_emax-E(:,t)).* ...
         S_e(c1*E(:,t)-c2*I(:,t)+c5*SC*E(:,t)+P(:,t-tpre+1))) + sigma*randn([n,1])*sqrt(dt);
     I(:,t+1) = I(:,t) + dt*(1/tau)*(-I(:,t) + (S_imax-I(:,t)).* ...

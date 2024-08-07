@@ -1,6 +1,6 @@
 function [BOLD] = Balloon_Windkessel_model(s,dt)
 %BALLOON_WINDKESSEL_MODEL 血氧动力学的Balloon-Windkessel model
-%   s(n,t)为神经活动的时间序列, dt为时间精度
+%   s(n,t)为神经活动的时间序列, 第二维为时间, dt为时间精度
 %   Balloon-Windkessel model将神经活动转化为BOLD信号
 %   参数参考：https://www.sciencedirect.com/science/article/pii/S0896627319300443
 

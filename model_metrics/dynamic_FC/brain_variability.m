@@ -3,6 +3,8 @@ function [variability] = brain_variability(BOLD, width, is_continue)
 %   BOLD 为各脑区的BOLD信号, n*t           
 %   width 为dFC滑动窗口的宽度
 %   is_continue为1时，窗口间隔为1，is_continue为0时，窗口间隔为width
+%   关于动态可变性指标与其生理意义，可以参考：
+%   https://academic.oup.com/brain/article/139/8/2307/1753964
 
 t = size(BOLD,2);
 n = size(BOLD,1);
