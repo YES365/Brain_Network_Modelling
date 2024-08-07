@@ -32,7 +32,7 @@ forward_models are used to convert simulated neural activity into measured data.
 
 ### model_metrics
 
-[model_metrics](model_metrics) 包含一些用于评价模型模拟优劣的度量
+[model_metrics](model_metrics) 包含一些用于评价模型模拟优劣的度量，仅包含本人在工作中用到的自己写的度量函数，并不是一个完整的模型评估的代码库，用何种指标评估模型的模拟结果取决于具体研究问题的需要
 
 ### neural_mass_models
 
