@@ -84,14 +84,27 @@ I_E = zeros([n, ttotol]);
 I_I = zeros([n, ttotol]);
 
 % EI_dMFM方程迭代
-for t=1:ttotol-1
-     I_E(:,t+1) = w_e.*I_b + (w_ee.*S_E(:,t) + G.*SC*S_E(:,t)).*J - w_ie.*S_I(:,t) + I;
-     I_I(:,t+1) = w_i.*I_b + w_ei.*S_E(:,t).*J - S_I(:,t);
 
-     S_E(:,t+1) = S_E(:,t) + dt.*(-S_E(:,t)./tau_e + ...
-         gamma.*(1-S_E(:,t)).*H_e(I_E(:,t+1))) + sigma.*randn([n 1]).*sqrt(dt);
-     S_I(:,t+1) = S_I(:,t) + dt.*(-S_I(:,t)./tau_i + ...
-         H_i(I_I(:,t+1))) + sigma.*randn([n 1]).*sqrt(dt);
+if size(I,2) > 1
+    for t=1:ttotol-1
+         I_E(:,t+1) = w_e.*I_b + (w_ee.*S_E(:,t) + G.*SC*S_E(:,t)).*J - w_ie.*S_I(:,t) + I(:,t);
+         I_I(:,t+1) = w_i.*I_b + w_ei.*S_E(:,t).*J - S_I(:,t);
+    
+         S_E(:,t+1) = S_E(:,t) + dt.*(-S_E(:,t)./tau_e + ...
+             gamma.*(1-S_E(:,t)).*H_e(I_E(:,t+1))) + sigma.*randn([n 1]).*sqrt(dt);
+         S_I(:,t+1) = S_I(:,t) + dt.*(-S_I(:,t)./tau_i + ...
+             H_i(I_I(:,t+1))) + sigma.*randn([n 1]).*sqrt(dt);
+    end
+else
+    for t=1:ttotol-1
+         I_E(:,t+1) = w_e.*I_b + (w_ee.*S_E(:,t) + G.*SC*S_E(:,t)).*J - w_ie.*S_I(:,t) + I;
+         I_I(:,t+1) = w_i.*I_b + w_ei.*S_E(:,t).*J - S_I(:,t);
+    
+         S_E(:,t+1) = S_E(:,t) + dt.*(-S_E(:,t)./tau_e + ...
+             gamma.*(1-S_E(:,t)).*H_e(I_E(:,t+1))) + sigma.*randn([n 1]).*sqrt(dt);
+         S_I(:,t+1) = S_I(:,t) + dt.*(-S_I(:,t)./tau_i + ...
+             H_i(I_I(:,t+1))) + sigma.*randn([n 1]).*sqrt(dt);
+    end
 end
 
 end
