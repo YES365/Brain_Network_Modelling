@@ -32,6 +32,8 @@ h_est = Si_emp;
 
 learning_rate_J = learning_rate_J*(10^floor(log10(abs(mean(abs(J_est),"all")))));
 learning_rate_h = learning_rate_h*(10^floor(log10(abs(mean(abs(h_est),"all")))));
+% learning_rate_J = 0.001;
+% learning_rate_h = 0.001;
 tolorance_J = tolorance_J*(10^floor(log10(abs(mean(abs(J_est),"all")))));
 tolorance_h = tolorance_h*(10^floor(log10(abs(mean(abs(h_est),"all")))));
 
@@ -85,11 +87,11 @@ while (num_iter < max_iteration)
     norm_grad_h = sqrt(norm(grad_h)./N);
     norm_grad_J = sqrt(norm(grad_J,'fro')./(N^2));
     cost_time = toc;
-    if window_count > 50
+    if window_count > window_size
         norm_grad_h_mean_now = mean(norm_grad_h_history);
         norm_grad_J_mean_now = mean(norm_grad_J_history);
-        % learning_rate_J = learning_rate_J * 0.5;
-        % learning_rate_h = learning_rate_h * 0.5;
+        learning_rate_J = learning_rate_J * 0.1;
+        learning_rate_h = learning_rate_h * 0.1;
         if (norm_grad_h_mean - norm_grad_h_mean_now > tolorance_h) || (norm_grad_J_mean - norm_grad_J_mean_now > tolorance_J)
             window_count = 0;
             norm_grad_h_mean = norm_grad_h_mean_now;

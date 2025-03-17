@@ -1,4 +1,4 @@
-function [h_est, J_est, performance] = inverse_ising_fit_with_gradients(target_metrics, temperature, series_length, learning_rate, tolorance, max_iteration, print_info)
+function [h_est, J_est, performance] = inverse_ising_fit_with_gradients(target_metrics, temperature, series_length, learning_rate_h, learning_rate_J, tolorance, max_iteration, print_info)
 %INVERSE_ISING_FIT_WITH_GRADIENTS 将Ising模型拟合至目标数据
 % 输入参数:
 %   target_metrics  - struct, 目标数据的特征，包括<s_i> double(N*1), 
@@ -26,10 +26,11 @@ N = length(Si_emp);
 J_est = -inv(cov_emp)./2;
 J_est(eye(N)==1) = 0;
 J_est = (J_est + J_est') / 2; 
-h_est = atanh(Si_emp) - J_est * Si_emp;
+% h_est = atanh(Si_emp) - J_est * Si_emp;
+h_est = zeros([N,1]);
 
-learning_rate_J = learning_rate*mean(abs(J_est),"all");
-learning_rate_h = learning_rate*mean(abs(h_est),"all");
+% learning_rate_J = learning_rate*mean(abs(J_est),"all");
+% learning_rate_h = learning_rate*mean(abs(h_est),"all");
 tolorance_J = tolorance*mean(abs(h_est),"all");
 tolorance_h = tolorance*mean(abs(h_est),"all");
 
@@ -40,8 +41,7 @@ SiSj_sim = (spins * spins') ./ series_length;
 % 梯度计算
 grad_h = Si_emp - Si_sim;
 grad_J = SiSj_emp - SiSj_sim;
-sign_grad_h = sign(mean(grad_h));
-sign_grad_J = sign(mean(grad_J,"all"));
+
 norm_grad_h = sqrt(norm(grad_h)./N);
 norm_grad_J = sqrt(norm(grad_J,'fro')./(N^2));
 num_iter = 0;
@@ -57,14 +57,6 @@ while (num_iter < max_iteration) && ((norm_grad_h > tolorance_h)||(norm_grad_J >
     % 梯度计算
     grad_h = Si_emp - Si_sim;
     grad_J = SiSj_emp - SiSj_sim;
-    if sign_grad_h ~= sign(mean(grad_h))
-        sign_grad_h = sign(mean(grad_h));
-        learning_rate_h = 0.1*learning_rate_h;
-    end
-    if sign_grad_J ~= sign(mean(grad_J,"all"))
-        sign_grad_J = sign(mean(grad_J,"all"));
-        learning_rate_J= 0.1*learning_rate_J;
-    end
     % 梯度下降
     h_est = h_est + learning_rate_h * grad_h;
     J_est = J_est + learning_rate_J * grad_J;

@@ -1,9 +1,9 @@
 clear;
-load("input\connectivity_matrices\subject1_scan1.mat");
+load("..\input\connectivity_matrices\subject1_scan1.mat");
 
 %% 单模型测试
 
-% 时间测试标准，单位0.1ms，时长600s(10min)
+% 时间测试标准，单位1ms，时长600s(10min)，测试平台9950X
 dt = 0.001;    
 T = 600;    
 
@@ -29,7 +29,7 @@ w(:,3) = 1.4; % w_ee = 1.4
 
 G = 1.5;
 
-% 约64s
+% 约3.1s
 tic
 [S_E, I_E, S_I, I_I] = EI_dMFM(connectivity_density_matrix, dt, T, w, I, G, sigma, H_e, H_i, tau);
 toc

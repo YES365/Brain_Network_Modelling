@@ -1,4 +1,4 @@
-function [E] = Wilson_Cowan(SC, dt, P, c5, varargin)
+function [E,I] = Wilson_Cowan(SC, dt, T, P, varargin)
 %WILSON_COWAN 无时延的Wilson-Cowan模型模拟
 %   必要参数为SC, dt, P, c5
 %   SC为结构连接矩阵，P为(n,T)外部刺激序列，dt为模拟的时间步长，c5为全局耦合系数
@@ -15,7 +15,8 @@ p = inputParser;            % 函数的输入解析器
 p.addParameter('c1',16);      % 设置变量名和默认参数
 p.addParameter('c2',12);      
 p.addParameter('c3',15);      
-p.addParameter('c4',3);      
+p.addParameter('c4',3); 
+p.addParameter('c5',1.5);  
 p.addParameter('a_e',1.3);      
 p.addParameter('theta_e',4);      
 p.addParameter('a_i',2);     
@@ -29,6 +30,7 @@ c1 = p.Results.c1;
 c2 = p.Results.c2;
 c3 = p.Results.c3;
 c4 = p.Results.c4;
+c5 = p.Results.c5;
 a_e = p.Results.a_e;
 theta_e = p.Results.theta_e;
 a_i = p.Results.a_i;
@@ -44,14 +46,14 @@ S_i = @(x)WC_transfer_function(x, a_i, theta_i);
 S_emax = WC_S_max(a_e, theta_e);
 S_imax = WC_S_max(a_i, theta_i);
 %% 进行模拟
-T = size(P, 2);
+ttotal = ceil(T/dt);
 % tpre = ceil(1/dt);
 
 % E = ones([n T+tpre])/10;
 % I = ones([n T+tpre])/10;
 
-E = ones([n T])/10;
-I = ones([n T])/10;
+E = ones([n ttotal])/10;
+I = ones([n ttotal])/10;
 
 % % 预运行1s
 % for t = 1:tpre-1
@@ -62,9 +64,9 @@ I = ones([n T])/10;
 % end
 
 
-for t = 1:length(E)-1
+for t = 1:ttotal-1
     E(:,t+1) = E(:,t) + dt*(1/tau).*(-E(:,t) + (S_emax-E(:,t)).* ...
-        S_e(c1*E(:,t)-c2*I(:,t)+c5*SC*E(:,t)+P(:,t-tpre+1))) + sigma*randn([n,1])*sqrt(dt);
+        S_e(c1*E(:,t)-c2*I(:,t)+c5*SC*E(:,t)+P(:,t))) + sigma*randn([n,1])*sqrt(dt);
     I(:,t+1) = I(:,t) + dt*(1/tau)*(-I(:,t) + (S_imax-I(:,t)).* ...
         S_i(c3*E(:,t)-c4*I(:,t))) + sigma*randn([n,1])*sqrt(dt);
 end

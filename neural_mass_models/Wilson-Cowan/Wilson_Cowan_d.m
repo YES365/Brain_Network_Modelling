@@ -1,4 +1,4 @@
-function [E] = Wilson_Cowan_d(SC, DM, dt, P, c5, varargin)
+function [E,I] = Wilson_Cowan_d(SC, DM, dt, T, P, varargin)
 %WILSON_COWAN_D 有时延的Wilson-Cowan模型模拟
 %   必要参数为SC, DM, dt, P, c5
 %   SC为结构连接矩阵，P为(n,T)外部刺激序列，dt为模拟的时间步长，c5为全局耦合系数
@@ -16,7 +16,8 @@ p = inputParser;            % 函数的输入解析器
 p.addParameter('c1',16);      % 设置变量名和默认参数
 p.addParameter('c2',12);      
 p.addParameter('c3',15);      
-p.addParameter('c4',3);      
+p.addParameter('c4',3);   
+p.addParameter('c5',1.5);  
 p.addParameter('a_e',1.3);      
 p.addParameter('theta_e',4);      
 p.addParameter('a_i',2);     
@@ -30,6 +31,7 @@ c1 = p.Results.c1;
 c2 = p.Results.c2;
 c3 = p.Results.c3;
 c4 = p.Results.c4;
+c5 = p.Results.c5;
 a_e = p.Results.a_e;
 theta_e = p.Results.theta_e;
 a_i = p.Results.a_i;
@@ -45,17 +47,16 @@ S_i = @(x)WC_transfer_function(x, a_i, theta_i);
 S_emax = WC_S_max(a_e, theta_e);
 S_imax = WC_S_max(a_i, theta_i);
 %% 进行模拟
-T = size(P, 2);
+ttotal = ceil(T/dt);
 tpre = ceil(1/dt);
 delay = round(DM/dt);
 delay_m = max(delay,[],'all');
 
-E = ones([n T+tpre+delay_m])/10;
-I = ones([n T+tpre+delay_m])/10;
+E = ones([n ttotal+tpre+delay_m])/10;
+I = ones([n ttotal+tpre+delay_m])/10;
 
 E_d = zeros(size(delay));
 
-% 预运行1s, 不施加
 %% 使用每行循环的方式提取延迟矩阵元
 
 % for t = delay_m+1:delay_m+tpre
@@ -110,6 +111,7 @@ for t = delay_m+tpre:length(E)-1
 end
 
 E = E(:,delay_m+tpre+1:end);
+I = I(:,delay_m+tpre+1:end);
 
 end
 

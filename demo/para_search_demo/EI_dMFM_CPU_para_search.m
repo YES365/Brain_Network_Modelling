@@ -8,8 +8,8 @@ clear;
 % SC数据是建模必要的，FC则作为评价指标
 % SC一般是纤维数加权矩阵，且通过归一化控制数值
 % FC一般不考虑负连接，提取FC的上三角部分用于计算相关系数
-SC = readmatrix("input\Desikan_input\sc_train.csv");
-FC = readmatrix("input\Desikan_input\fc_train.csv");
+SC = readmatrix("..\input\Desikan_input\sc_train.csv");
+FC = readmatrix("..\input\Desikan_input\fc_train.csv");
 SC = SC ./ max(SC,[],"all");
 FC(eye(size(FC))==1) = 0;
 FC(FC < 0) = 0;
@@ -106,6 +106,6 @@ colormap turbo
 xlabel('G')
 ylabel('w_{ie}')
 title('cc BOLD I_E')
-saveas(fig, "Figures\EI_dMFM_2d_para_search_CPU", 'png');
+saveas(fig, "..\Figures\EI_dMFM_2d_para_search_CPU", 'png');
 
-save("output\EI_dMFM_2d_para_search_CPU","cc_boldi_map")
+save("..\output\EI_dMFM_2d_para_search_CPU","cc_boldi_map")
